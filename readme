@@ -1,0 +1,60 @@
+ 首先我先上我的powerdns(pdns) 数据库的数据，由于使用的navicat复制出来的，所以有点奇怪
+ 我这里主的dc服务器是dc01.example.com。这里已经是个活动目录了ActiveDirectory
+ 这是我把pdns启动了动态更新并把dc01.helijia.com.这机器指向了我DNS服务器（该dns服务跑在了K8S中，后台使用的是mysql。数据存储使用的pvc读取的
+ class-storage-ceph）所以相当于存储到了ceph中
+ 
+ i use pdns (powerdns) as activedirectory backend dns. and pnds server run in k8s .
+ 
+ so i give you my pdns recoder
+ 
+ 废话不多说贴上我的数据。
+ 
+oa.example	A	172.16.254.200	120			0		1
+ns.example	A	172.16.254.81	120			0		1
+dc01.example	A	172.16.254.71	1200	0		0		1
+example	A	172.16.254.71	600	0		0		1
+_ldap._tcp.example	SRV	100 389 dc01.example	600	0		0		1
+_tcp.example						0		1
+_ldap._tcp.default-first-site-name._sites.example	SRV	100 389 dc01.example	600	0		0		1
+_sites.example						0		1
+default-first-site-name._sites.example						0		1
+_tcp.default-first-site-name._sites.example						0		1
+_ldap._tcp.pdc._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
+_msdcs.example						0		1
+pdc._msdcs.example						0		1
+_tcp.pdc._msdcs.example						0		1
+_ldap._tcp.65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
+domains._msdcs.example						0		1
+65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example						0		1
+_tcp.65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example						0		1
+7ff5c6ff-198c-40d8-9aa0-46cf485aa15a._msdcs.example	CNAME	dc01.example	600	0		0		1
+_ldap._tcp.dc._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
+dc._msdcs.example						0		1
+_tcp.dc._msdcs.example						0		1
+_ldap._tcp.default-first-site-name._sites.dc._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
+_sites.dc._msdcs.example						0		1
+default-first-site-name._sites.dc._msdcs.example						0		1
+_tcp.default-first-site-name._sites.dc._msdcs.example						0		1
+_ldap._tcp.gc._msdcs.example	SRV	100 3268 dc01.example	600	0		0		1
+_tcp.gc._msdcs.example						0		1
+_ldap._tcp.default-first-site-name._sites.gc._msdcs.example	SRV	100 3268 dc01.example	600	0		0		1
+_sites.gc._msdcs.example						0		1
+default-first-site-name._sites.gc._msdcs.example						0		1
+_tcp.default-first-site-name._sites.gc._msdcs.example						0		1
+gc._msdcs.example	A	172.16.254.71	600	0		0		1
+_kerberos._tcp.dc._msdcs.example	SRV	100 88 dc01.example	600	0		0		1
+_kerberos._tcp.default-first-site-name._sites.dc._msdcs.example	SRV	100 88 dc01.example	600	0		0		1
+_kerberos._tcp.example	SRV	100 88 dc01.example	600	0		0		1
+_kerberos._tcp.default-first-site-name._sites.example	SRV	100 88 dc01.example	600	0		0		1
+_gc._tcp.example	SRV	100 3268 dc01.example	600	0		0		1
+_gc._tcp.default-first-site-name._sites.example	SRV	100 3268 dc01.example	600	0		0		1
+_kerberos._udp.example	SRV	100 88 dc01.example	600	0		0		1
+_udp.example						0		1
+_kpasswd._tcp.example	SRV	100 464 dc01.example	600	0		0		1
+_kpasswd._udp.example	SRV	100 464 dc01.example	600	0		0		1
+example	SOA	ns.example. admin.example. 2019041724 10380 3600 604800 3600	86400	0		0		1
+
+ 我平时比较忙后续更新也不知道什么时候，请谅解.
+ 
+Because of the need to work . so i Do not know when to update . I am english very bad . so maybe Couldn't say for sure.sorry
+ 
