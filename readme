@@ -9,50 +9,50 @@
  
  废话不多说贴上我的数据。
  
-oa.example	A	172.16.254.200	120			0		1
-ns.example	A	172.16.254.81	120			0		1
-dc01.example	A	172.16.254.71	1200	0		0		1
-example	A	172.16.254.71	600	0		0		1
-_ldap._tcp.example	SRV	100 389 dc01.example	600	0		0		1
-_tcp.example						0		1
-_ldap._tcp.default-first-site-name._sites.example	SRV	100 389 dc01.example	600	0		0		1
-_sites.example						0		1
-default-first-site-name._sites.example						0		1
-_tcp.default-first-site-name._sites.example						0		1
-_ldap._tcp.pdc._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
-_msdcs.example						0		1
-pdc._msdcs.example						0		1
-_tcp.pdc._msdcs.example						0		1
-_ldap._tcp.65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
-domains._msdcs.example						0		1
-65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example						0		1
-_tcp.65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example						0		1
-7ff5c6ff-198c-40d8-9aa0-46cf485aa15a._msdcs.example	CNAME	dc01.example	600	0		0		1
-_ldap._tcp.dc._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
-dc._msdcs.example						0		1
-_tcp.dc._msdcs.example						0		1
-_ldap._tcp.default-first-site-name._sites.dc._msdcs.example	SRV	100 389 dc01.example	600	0		0		1
-_sites.dc._msdcs.example						0		1
-default-first-site-name._sites.dc._msdcs.example						0		1
-_tcp.default-first-site-name._sites.dc._msdcs.example						0		1
-_ldap._tcp.gc._msdcs.example	SRV	100 3268 dc01.example	600	0		0		1
-_tcp.gc._msdcs.example						0		1
-_ldap._tcp.default-first-site-name._sites.gc._msdcs.example	SRV	100 3268 dc01.example	600	0		0		1
-_sites.gc._msdcs.example						0		1
-default-first-site-name._sites.gc._msdcs.example						0		1
-_tcp.default-first-site-name._sites.gc._msdcs.example						0		1
-gc._msdcs.example	A	172.16.254.71	600	0		0		1
-_kerberos._tcp.dc._msdcs.example	SRV	100 88 dc01.example	600	0		0		1
-_kerberos._tcp.default-first-site-name._sites.dc._msdcs.example	SRV	100 88 dc01.example	600	0		0		1
-_kerberos._tcp.example	SRV	100 88 dc01.example	600	0		0		1
-_kerberos._tcp.default-first-site-name._sites.example	SRV	100 88 dc01.example	600	0		0		1
-_gc._tcp.example	SRV	100 3268 dc01.example	600	0		0		1
-_gc._tcp.default-first-site-name._sites.example	SRV	100 3268 dc01.example	600	0		0		1
-_kerberos._udp.example	SRV	100 88 dc01.example	600	0		0		1
-_udp.example						0		1
-_kpasswd._tcp.example	SRV	100 464 dc01.example	600	0		0		1
-_kpasswd._udp.example	SRV	100 464 dc01.example	600	0		0		1
-example	SOA	ns.example. admin.example. 2019041724 10380 3600 604800 3600	86400	0		0		1
+oa.example.com	A	172.16.254.200	120			0		1
+ns.example.com	A	172.16.254.81	120			0		1
+dc01.example.com	A	172.16.254.71	1200	0		0		1
+example.com	A	172.16.254.71	600	0		0		1
+_ldap._tcp.example.com	SRV	100 389 dc01.example.com	600	0		0		1
+_tcp.example.com						0		1
+_ldap._tcp.default-first-site-name._sites.example.com	SRV	100 389 dc01.example.com	600	0		0		1
+_sites.example.com						0		1
+default-first-site-name._sites.example.com						0		1
+_tcp.default-first-site-name._sites.example.com						0		1
+_ldap._tcp.pdc._msdcs.example.com	SRV	100 389 dc01.example.com	600	0		0		1
+_msdcs.example.com						0		1
+pdc._msdcs.example.com						0		1
+_tcp.pdc._msdcs.example.com						0		1
+_ldap._tcp.65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example.com	SRV	100 389 dc01.example.com	600	0		0		1
+domains._msdcs.example.com						0		1
+65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example.com						0		1
+_tcp.65229481-9c91-4495-b629-689ad2721991.domains._msdcs.example.com						0		1
+7ff5c6ff-198c-40d8-9aa0-46cf485aa15a._msdcs.example.com	CNAME	dc01.example.com	600	0		0		1
+_ldap._tcp.dc._msdcs.example.com	SRV	100 389 dc01.example.com	600	0		0		1
+dc._msdcs.example.com						0		1
+_tcp.dc._msdcs.example.com						0		1
+_ldap._tcp.default-first-site-name._sites.dc._msdcs.example.com	SRV	100 389 dc01.example.com	600	0		0		1
+_sites.dc._msdcs.example.com						0		1
+default-first-site-name._sites.dc._msdcs.example.com						0		1
+_tcp.default-first-site-name._sites.dc._msdcs.example.com						0		1
+_ldap._tcp.gc._msdcs.example.com	SRV	100 3268 dc01.example.com	600	0		0		1
+_tcp.gc._msdcs.example.com						0		1
+_ldap._tcp.default-first-site-name._sites.gc._msdcs.example.com	SRV	100 3268 dc01.example.com	600	0		0		1
+_sites.gc._msdcs.example.com						0		1
+default-first-site-name._sites.gc._msdcs.example.com						0		1
+_tcp.default-first-site-name._sites.gc._msdcs.example.com						0		1
+gc._msdcs.example.com	A	172.16.254.71	600	0		0		1
+_kerberos._tcp.dc._msdcs.example.com	SRV	100 88 dc01.example.com	600	0		0		1
+_kerberos._tcp.default-first-site-name._sites.dc._msdcs.example.com	SRV	100 88 dc01.example.com	600	0		0		1
+_kerberos._tcp.example.com	SRV	100 88 dc01.example.com	600	0		0		1
+_kerberos._tcp.default-first-site-name._sites.example.com	SRV	100 88 dc01.example.com	600	0		0		1
+_gc._tcp.example.com	SRV	100 3268 dc01.example.com	600	0		0		1
+_gc._tcp.default-first-site-name._sites.example.com	SRV	100 3268 dc01.example.com	600	0		0		1
+_kerberos._udp.example.com	SRV	100 88 dc01.example.com	600	0		0		1
+_udp.example.com						0		1
+_kpasswd._tcp.example.com	SRV	100 464 dc01.example.com	600	0		0		1
+_kpasswd._udp.example.com	SRV	100 464 dc01.example.com	600	0		0		1
+example.com	SOA	ns.example.com. admin.example.com. 2019041724 10380 3600 604800 3600	86400	0		0		1
 
  我平时比较忙后续更新也不知道什么时候，请谅解.
  
