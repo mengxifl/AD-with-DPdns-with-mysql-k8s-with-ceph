@@ -1,0 +1,37 @@
+这里我依然编辑了etcd的镜像，因为它与我的时区不对，同样的，docker制作镜像的内容和docker使用不在我教程里
+目录结构，你也可以自己定义，注意自己定义完了需要改下面的
+
+\data\etcd\etcdca\ --->这里有很多文件，有之前生成的ca.pem这个最特殊，还有对应的etcd00*.pem一堆这些文件
+\data\etcd\data\  --->存放数据，目前是空的
+
+所有etcd节点都需要运行这个
+---------------------------------
+docker run \
+-d \
+--restart=always \
+--network=host \
+-v /data/etcd/etcdca:/ca \
+-v /data/etcd/etcdca:/ca \
+-v /data/etcd/data:/data \
+--privileged=true \
+--name=etcd \
+mx/etcd:v0.2 \
+/usr/local/bin/etcd \
+--name ceph-etcd01 \  <---需要改成你对应的
+--cert-file=/ca/etcd00ser.pem \   <---需要改成你对应的
+--key-file=/ca/etcd00ser-key.pem \   <---需要改成你对应的
+--peer-cert-file=/ca/etcd00peer.pem \   <---需要改成你对应的
+--peer-key-file=/ca/etcd00peer-key.pem \   <---需要改成你对应的
+--trusted-ca-file=/ca/ca.pem \  
+--peer-trusted-ca-file=/ca/ca.pem \
+--initial-advertise-peer-urls https://172.16.254.83:2380 \   <---需要改成你对应的
+--listen-peer-urls https://172.16.254.83:2380 \   <---需要改成你对应的
+--advertise-client-urls https://172.16.254.83:2379 \   <---需要改成你对应的
+--listen-client-urls https://172.16.254.83:2379,http://127.0.0.1:2379 \   <---需要改成你对应的
+--initial-cluster-token etcd-cluster-0 \   <---需要改成你对应的
+--initial-cluster ceph-etcd00=https://172.16.254.82:2380,ceph-etcd01=https://172.16.254.83:2380,ceph-etcd02=https://172.16.254.84:2380,ceph-etcd03=https://172.16.254.85:2380 \  <---需要改成你对应的
+--initial-cluster-state new \
+--peer-auto-tls=true \
+--client-cert-auth=true \
+--data-dir=/data/
+
