@@ -41,7 +41,7 @@ mx/etcd:v0.2 \
 etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem cluster-health
 
 假设ABCD节点死了
-etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem member remove 7a596bab8b2ef126
+etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem member remove ABCD
 
 添加节点
 etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem member add ceph-etcd03 https://172.16.254.85:2380
