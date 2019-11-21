@@ -1,0 +1,92 @@
+1、安装docker  yum install -y docker-ce-18.09.9-3.el7
+2、安装kubelet  yum install -y kubelet-1.16.3
+3、安装kubeadm  yum install -y kubeadm-1.16.3
+4、所有依赖的服务先启动起来
+  4.1 systemctl start keepalived && systemctl enable keepalived &&systemctl status keepalived
+  4.2 systemctl start iptables && systemctl enable iptables && systemctl status iptables
+  4.3 systemctl start docker && systemctl enable docker && systemctl status docker
+  4.4 systemctl enable kubelet
+5、先下载镜像文件 
+  5.1 kubeadm config images pull --image-repository registry.aliyuncs.com/google_containers # change your fastest hub
+  5.2 把下载的镜像改名字改成k8s.gcr.io/kube-apiserver:1.16.3 这种格式
+6、把之前用cfssl生成的放到k8s文件里面的证书搞到/etc/kubernetes/pki/etcd 还有个ca.pem别忘了也搞过去
+7、编辑init文件，这步很重要以后如果以后安装需要参考官方文档
+https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm
+这个最下面有最新的示例init.yaml
+-----------
+apiVersion: kubeadm.k8s.io/v1beta2 #以后升级需要参考官方文档
+kind: InitConfiguration
+localAPIEndpoint:
+  advertiseAddress: 172.16.254.75 #k8s第一个节点的地址
+  bindPort: 6443
+---
+apiVersion: kubeadm.k8s.io/v1beta2
+kind: ClusterConfiguration
+kubernetesVersion: "v1.16.3"
+etcd:
+  external:
+    endpoints:
+    - "https://172.16.254.82:2379"  #etcd的地址
+    - "https://172.16.254.83:2379"  #etcd的地址
+    - "https://172.16.254.84:2379"  #etcd的地址
+    - "https://172.16.254.85:2379"  #etcd的地址
+    caFile: /etc/kubernetes/pki/etcd/ca.pem  #之前倒过来的证书文件
+    certFile: /etc/kubernetes/pki/etcd/client.pem #之前倒过来的证书文件
+    keyFile: /etc/kubernetes/pki/etcd/client-key.pem #之前倒过来的证书文件
+networking:
+  podSubnet: "10.224.0.0/16"
+  serviceSubnet: "10.96.0.0/12"
+apiServer:
+  certSANs:
+  - k8smaster00
+  - k8smaster01
+  - k8smaster02
+  - k8smaster03
+  - k8snode00
+  - k8snode01
+  - 172.16.254.75
+  
+  - 172.16.254.76
+  - 172.16.254.77 #Vip
+  - 172.16.254.79
+  - 172.16.254.80
+  - 127.0.0.1
+  extraArgs:
+    service-node-port-range: 20-65535
+clusterName: "ITcluster"
+controlPlaneEndpoint: "172.16.254.77:6443"
+-----------
+
+
+8、初始化k8skubeadm init --config=init.yaml
+运行这个命令会在/etc/kubernetes/ 生成文件 其中pki是证书 manifests是一些yaml的文件 api什么的就是通过这个生成的。
+回到etcd上面 docker exec -it etcd /bin/sh 
+export ETCDCTL_API=3 && etcdctl get / --prefix --keys-only 可以看到很多k8s数据
+如果你配置错需要把这些东西删了，命令是
+export ETCDCTL_API=3 && etcdctl del / --prefix
+
+然后提示你
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+运行完这个就可以运行kubectl 命令了
+
+还有一段话
+
+  kubeadm join 172.16.254.77:6443 --token XXXXXXX \
+    --discovery-token-ca-cert-hash sha256:XXXXXXX \
+    --control-plane
+
+
+  kubeadm join 172.16.254.85:6443 --token 2r1w7t.2x3srwrzqzyqkg5x --discovery-token-ca-cert-hash sha256:XXXXXXX
+
+上面那句话是其他master节点加入的命令，后续还会用到
+下面那句话是slave节点加入集群的命令。key忘了无所谓后续可以在主节点上运行
+
+kubeadm token create
+
+生成一个新的加入的key
+
+kubectl get pods -n kube-system
+
+除了coredns其他的都启动起来了，而且5分钟之内不重启就证明没有问题了。
