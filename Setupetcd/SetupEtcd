@@ -47,7 +47,7 @@ etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key
 
 后面会提示你使用不一样的命令我这里用docker直接给出命令
 -------
-
+```
 docker run \
 --restart=always \
 -d \
@@ -75,3 +75,4 @@ mx/etcd:v0.2 \
 --peer-auto-tls=true \
 --client-cert-auth=true \
 --data-dir=/data/
+```
