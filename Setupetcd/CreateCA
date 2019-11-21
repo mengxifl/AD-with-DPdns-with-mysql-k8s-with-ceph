@@ -1,0 +1,24 @@
+这里需要个ca-config.json文件我放到CAjson文件夹里面了，这句话生成的是ca需要的证书文件ca.csr和ca.pem还有ca-key.pem
+而且生成客户端也就是k8s访问etcd需要的证书
+docker run \
+--rm \
+-v /var/cfssl:/file \
+--privileged=true \
+mx/cfssl:v0.1 \
+bash -c \
+"cfssl gencert -initca /file/jsonfile/ca-csr.json | /usr/local/bin/cfssljson -bare /file/CAfile/ca &&
+cfssl gencert -ca=/file/CAfile/ca.pem -ca-key=/file/CAfile/ca-key.pem -config=/file/jsonfile/ca-config.json -profile=client /file/jsonfile/client.json | /usr/local/bin/cfssljson -bare /file/K8Sfile/client \"
+
+
+
+生成etcd服务端需要的证书，这里注意你需要更改config.json里面的内容，对应你的每一个etcd服务器，我这里就是实例所以就运行了一次，事实上有几个etcd就需要运行几次
+docker run \
+--rm \
+-v /var/cfssl:/file \
+--privileged=true \
+mx/cfssl:v0.1 \
+bash -c "cfssl gencert -ca=/file/CAfile/ca.pem -ca-key=/file/CAfile/ca-key.pem -config=/file/jsonfile/ca-config.json -profile=server  /file/jsonfile/config.json | /usr/local/bin/cfssljson -bare /file/etcdfile/etcd00ser &&
+cfssl gencert -ca=/file/CAfile/ca.pem -ca-key=/file/CAfile/ca-key.pem -config=/file/jsonfile/ca-config.json -profile=peer  /file/jsonfile/config.json | /usr/local/bin/cfssljson -bare /file/etcdfile/etcd00peer"
+
+
+运行完了这些你会在相应的目录下面得到一堆证书和文件
