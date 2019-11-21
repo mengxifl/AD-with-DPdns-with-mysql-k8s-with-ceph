@@ -35,3 +35,43 @@ mx/etcd:v0.2 \
 --client-cert-auth=true \
 --data-dir=/data/
 
+---------------------------------
+如果后续有节点死掉，需要删掉节点，加入新的
+etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem cluster-health
+
+假设ABCD节点死了
+etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem member remove 7a596bab8b2ef126
+
+添加节点
+etcdctl --endpoints=https://ceph-etcd01:2379 --cert-file=/ca/etcd01ser.pem --key-file=/ca/etcd01ser-key.pem  --ca-file=/ca/ca.pem member add ceph-etcd03 https://172.16.254.85:2380
+
+后面会提示你使用不一样的命令我这里用docker直接给出命令
+-------
+
+docker run \
+--restart=always \
+-d \
+--network=host \
+-v /data/etcd/etcdca:/ca \
+-v /data/etcd/data:/data \
+--privileged=true \
+--name=etcd \
+mx/etcd:v0.2 \
+/usr/local/bin/etcd \
+--name ceph-etcd03 \
+--cert-file=/ca/etcd03ser.pem \
+--key-file=/ca/etcd03ser-key.pem \
+--peer-cert-file=/ca/etcd03peer.pem \
+--peer-key-file=/ca/etcd03peer-key.pem \
+--trusted-ca-file=/ca/ca.pem \
+--peer-trusted-ca-file=/ca/ca.pem \
+--initial-advertise-peer-urls https://172.16.254.85:2380 \
+--listen-peer-urls https://172.16.254.85:2380 \
+--advertise-client-urls https://172.16.254.85:2379 \
+--listen-client-urls https://172.16.254.85:2379,http://127.0.0.1:2379 \
+--initial-cluster-token etcd-cluster-0 \
+--initial-cluster ceph-etcd00=https://172.16.254.82:2380,ceph-etcd01=https://172.16.254.83:2380,ceph-etcd02=https://172.16.254.84:2380,ceph-etcd03=https://172.16.254.85:2380 \
+--initial-cluster-state existing \
+--peer-auto-tls=true \
+--client-cert-auth=true \
+--data-dir=/data/
