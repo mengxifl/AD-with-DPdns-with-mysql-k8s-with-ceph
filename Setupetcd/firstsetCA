@@ -1,0 +1,93 @@
+这里我使用docker搭建，同时使用cfssl生成证书，cfssl的docker镜像由于时间不对，所以我改了改镜像，这属于docker的东西。不提及只涉及cfssl和etcd
+---------------------------------------------------
+目录情况
+/file  
+    /jsonfile  --存储配置文件
+         /ca-csr.json
+         /ca-config.json
+         /client.json
+         /config.json
+    /CAfile    --存储生成的ca文件
+    /etcdfile  --存储etcd需要的文件
+    /K8Sfile   --存储k8s需要的文件
+---------------------------------------------------
+
+ca-csr.json,CA的证书申请
+====================================================
+{
+    "signing": {
+        "default": {
+            "expiry": "438000h"
+        },
+        "profiles": {
+            "server": {
+                "expiry": "438000h",
+                "usages": [
+                    "signing",
+                    "key encipherment",
+                    "server auth",
+                    "client auth"
+                ]
+            },
+            "client": {
+                "expiry": "438000h",
+                "usages": [
+                    "signing",
+                    "key encipherment",
+                    "client auth"
+                ]
+            },
+            "peer": {
+                "expiry": "438000h",
+                "usages": [
+                    "signing",
+                    "key encipherment",
+                    "server auth",
+                    "client auth"
+                ]
+            }
+        }
+    }
+}
+====================================================
+
+
+client.json 客户端需要
+====================================================
+{
+	"CN":"client",
+	"hosts":[""],
+	"key":{
+		"algo":"rsa","size":2048
+	}
+}
+====================================================
+config.json etcd需要
+====================================================
+{
+    "CN":"etcd00", <<这里需要改
+    "hosts":[
+        "172.16.254.86", <<这里需要改
+        "etcd00", <<这里需要改
+        "localhost"< <这里需要改
+    ],
+    "key":{"algo":"rsa","size":2048}
+}
+====================================================
+ca-csr.json ca成为证书颁发机构需要
+====================================================
+{
+    "CN": "etcdpriCA",
+    "key": {
+        "algo": "rsa",
+        "size": 2048
+    },
+    "names": [
+        {
+            "C": "CN",
+            "L": "Beijing",
+            "O": "exmaple",
+            "OU": "Tech"
+        }
+    ]
+}
