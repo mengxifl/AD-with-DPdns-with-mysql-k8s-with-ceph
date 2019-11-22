@@ -1,0 +1,14 @@
+1、前几步同主节点一样
+2、从其他的主节点的名字要跟之前kubeadm init --config=init.yaml 这里面配置的certSANs的名字必须一致，而且网络可以通
+3、别忘了更改keepalived的配置文件
+4、一直到安装完了kubelet和kubeadm以及docker，且启动起来docker
+5、把主节点的docker镜像搞到其他master节点上
+6、在其他master节点创建目录/etc/kubernetes/pki/和/etc/kubernetes/pki/etcd/
+7、复制文件到从节点
+   6.1 scp /etc/kubernetes/admin.conf k8smaster01:/etc/kubernetes/  #admin配置文件
+   6.2 scp /etc/kubernetes/pki/* k8smaster01:/etc/kubernetes/pki/   #k8s集群证书
+   6.3 scp /etc/kubernetes/pki/etcd/* k8smaster01:/etc/kubernetes/pki/etcd/    #etcd证书  
+8、加入集群
+      kubeadm join 172.16.254.77:6443 --token XXXXXXXXXX \
+    --discovery-token-ca-cert-hash sha256:XXXXXXXXXXXXXXXX \
+    --control-plane
