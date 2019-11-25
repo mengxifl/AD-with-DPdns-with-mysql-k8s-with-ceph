@@ -33,3 +33,6 @@
     4.1 yum install -y keepalived
     4.2 vi /etc/keepalived/keepalived.conf  <=================keepalived配置不在教程里面，这里注意虚拟ip和以后需要用到
     4.3 systemctl start keepalived && systemctl enable keepalived &&systemctl status keepalived
+    
+    
+    by:mx 首发github.com
