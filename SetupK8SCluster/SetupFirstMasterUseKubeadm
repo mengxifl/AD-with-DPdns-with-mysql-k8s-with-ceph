@@ -90,3 +90,5 @@ kubeadm token create
 kubectl get pods -n kube-system
 
 除了coredns其他的都启动起来了，而且5分钟之内不重启就证明没有问题了。
+
+by:mx 首发github.com
