@@ -84,7 +84,7 @@ docker run \
      mx/cephdaemon:v0.2 mds
   
    集群故障最大的问题就是osd坏了
-   可以通过进入container里面使用
+   可以通过进入container里面或使用docker exec
      ceph osd tree 看下哪个坏了
      如果osd.1坏了
      ceph osd out osd.1
