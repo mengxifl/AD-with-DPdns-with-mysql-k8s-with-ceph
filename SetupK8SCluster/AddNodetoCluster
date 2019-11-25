@@ -2,3 +2,6 @@
 2、当安装好kubeadm之后、使用
 kubeadm join 172.16.254.85:6443 --token XXXXXXX --discovery-token-ca-cert-hash sha256:XXXXXXX
 命令即可加入到集群中
+
+
+by:mx 首发github.com
