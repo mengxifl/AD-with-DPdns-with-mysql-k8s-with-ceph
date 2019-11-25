@@ -22,3 +22,5 @@ cfssl gencert -ca=/file/CAfile/ca.pem -ca-key=/file/CAfile/ca-key.pem -config=/f
 
 
 运行完了这些你会在相应的目录下面得到一堆证书和文件
+
+by:mx 首发github.com
