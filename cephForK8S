@@ -71,6 +71,8 @@ docker run \
      -v /data/ceph/etc:/etc/ceph \
      -v /data/ceph/lib:/var/lib/ceph/ \
      mx/cephdaemon:v0.2 mgr
+
+
    7、可选：安装mds也需要上面的/data/ceph/etcd/* 和/data/ceph/lib/boots* ，同时需要几个就启动几个,需要启动2个，其中会待命一个，可以用命令行设置同时启动多个
      docker run \
      --name ceph_mds \ 
@@ -81,4 +83,13 @@ docker run \
      -e CEPHFS_CREATE=1  \
      mx/cephdaemon:v0.2 mds
   
-   
+   集群故障最大的问题就是osd坏了
+   可以通过进入container里面使用
+     ceph osd tree 看下哪个坏了
+     如果osd.1坏了
+     ceph osd out osd.1
+     ceph osd rm osd.1
+     ceph osd crush rm osd.1
+     ceph auth del osd.1
+     再找个新机器把文件搞过来，再启动起来就正常了
+     ceph osd rm 1
