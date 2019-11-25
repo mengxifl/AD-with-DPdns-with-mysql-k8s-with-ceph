@@ -6,3 +6,79 @@
           /etc
           /lib
           
+
+1、启动第一个monitor节点
+docker run \
+        --name=ceph_mon \
+        -d \
+        --network=host \
+        --restart=always \
+        --privileged=true \   #貌似可加可不加
+        -v /data/ceph/etc:/etc/ceph \
+        -v /data/ceph/lib:/var/lib/ceph \
+        -e MON_IP=172.16.254.83 \
+        -e CEPH_PUBLIC_NETWORK=172.16.254.0/24 \
+        mx/cephdaemon:v0.2 mon
+
+2、编辑/data/ceph/etc/ceph.conf
+     [global]
+     fsid = 418a90d1-4d4d-4859-a8ad-28d6711c136d
+     mon initial members = ceph00,ceph02,ceph03,ceph01 //你ceph要启动ceph的机器名字，得保证互通，而且所有节点都一样。后续再增加还要编辑而且同步到所有节点上
+     mon host = 172.16.254.82,172.16.254.84,172.16.254.85,172.16.254.83 #IP
+     public network = 172.16.254.0/24 #对外网段
+     cluster network = 172.16.254.0/24 #同步网段，适用于多个网卡
+     osd journal size = 100 #调优的
+     log file = /dev/null
+     osd max object name len = 256 #调优的
+     osd max object namespace len = 64 #调优的
+     mon_allow_pool_delete = true #调优的
+ 
+3、把/data/ceph/etcd/* 和/data/ceph/lib/boots* 复制到各个节点上面
+
+4、要在哪个节点上面运行monitor就运行
+     docker run \
+        --name=ceph_mon \
+        -d \
+        --network=host \
+        --restart=always \
+        --privileged=true \   #貌似可加可不加
+        -v /data/ceph/etc:/etc/ceph \
+        -v /data/ceph/lib:/var/lib/ceph \
+        -e MON_IP=172.16.254.83 \
+        -e CEPH_PUBLIC_NETWORK=172.16.254.0/24 \
+        mx/cephdaemon:v0.2 mon
+   
+   
+   
+   5、启动osd，注意要启动osd也需要上面的/data/ceph/etcd/* 和/data/ceph/lib/boots* ，同时需要几个就启动几个
+      docker run \
+        --name=ceph_osd \
+        -d \
+        --net=host \
+        --restart=always \
+        --privileged=true \
+        -v /data/ceph/etc:/etc/ceph \
+        -v /data/ceph/lib:/var/lib/ceph/ \
+        #-v /dev/:/dev/ \ osd管理磁盘才需要 
+        #-e OSD_DEVICE=/dev/vdd \  osd管理磁盘才需要     
+        -e OSD_TYPE=directory \  #-e OSD_TYPE=disk \ osd管理磁盘才需要   
+        mx/cephdaemon:v0.2 osd
+   
+   6、安装集群监控和管理服务，也需要上面的/data/ceph/etcd/* 和/data/ceph/lib/boots* ，同时需要几个就启动几个   
+     docker run -d --net=host \
+     --restart=always \
+     --privileged=true \
+     -v /data/ceph/etc:/etc/ceph \
+     -v /data/ceph/lib:/var/lib/ceph/ \
+     mx/cephdaemon:v0.2 mgr
+   7、可选：安装mds也需要上面的/data/ceph/etcd/* 和/data/ceph/lib/boots* ，同时需要几个就启动几个,需要启动2个，其中会待命一个，可以用命令行设置同时启动多个
+     docker run \
+     --name ceph_mds \ 
+     -d   --net=host \       
+     --restart=always \       
+     -v /data/ceph/lib:/var/lib/ceph/ \       
+     -v /data/ceph/etc:/etc/ceph  \     
+     -e CEPHFS_CREATE=1  \
+     mx/cephdaemon:v0.2 mds
+  
+   
