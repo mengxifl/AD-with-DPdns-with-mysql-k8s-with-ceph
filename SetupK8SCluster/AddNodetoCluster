@@ -1,0 +1,4 @@
+1、从节点安装的软件跟主节点差不多，除了keepalived不安装
+2、当安装好kubeadm之后、使用
+kubeadm join 172.16.254.85:6443 --token XXXXXXX --discovery-token-ca-cert-hash sha256:XXXXXXX
+命令即可加入到集群中
