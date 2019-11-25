@@ -12,3 +12,5 @@
       kubeadm join 172.16.254.77:6443 --token XXXXXXXXXX \
     --discovery-token-ca-cert-hash sha256:XXXXXXXXXXXXXXXX \
     --control-plane
+    
+ by:mx 首发github.com
