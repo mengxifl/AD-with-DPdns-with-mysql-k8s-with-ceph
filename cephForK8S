@@ -93,3 +93,5 @@ docker run \
      ceph auth del osd.1
      再找个新机器把文件搞过来，再启动起来就正常了
      ceph osd rm 1
+
+by:mx 首发github.com
