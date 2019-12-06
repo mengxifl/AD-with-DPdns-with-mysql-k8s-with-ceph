@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cephfs-storage
+  namespace: ceph-storage
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: cephfs-storage
+      creater: mengxi
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cephfs-storage
+        creater: mengxi
+    spec:
+      hostNetwork: true
+      containers:
+      - name: cephfs-provisioner
+        image: "mx/quay.io/cephfs-provisioner:v1" #quay.io/external_storage/cephfs-provisioner:latest #自己的镜像事实上是只是改了改官方的
+        env:
+        - name: PROVISIONER_NAME
+          value: ceph.com/cephfs
+        - name: PROVISIONER_SECRET_NAMESPACE
+          value: ceph-storage #SECRET 创建的名称空间需要有权限
+        command:
+        - "/usr/local/bin/cephfs-provisioner"
+        args:
+        - "-id=cephfs-provisioner-1"
+      serviceAccount: ceph-storage #如果不用rbac去掉该行
